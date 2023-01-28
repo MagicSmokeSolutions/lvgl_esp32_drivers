@@ -64,6 +64,18 @@ extern "C" {
 
 #define ENABLE_TOUCH_INPUT  CONFIG_LV_ENABLE_TOUCH
 
+// See: https://github.com/lvgl/lv_port_esp32/issues/233
+#ifdef CONFIG_IDF_TARGET_ESP32
+#define SPI_HOST    SPI1_HOST
+#define HSPI_HOST   SPI2_HOST
+#define VSPI_HOST   SPI3_HOST
+#elif CONFIG_IDF_TARGET_ESP32S2 || CONFIG_IDF_TARGET_ESP32S3
+// SPI_HOST (SPI1_HOST) is not supported by the SPI Master and SPI Slave driver on ESP32-S2
+#define SPI_HOST    SPI1_HOST
+#define FSPI_HOST   SPI2_HOST
+#define HSPI_HOST   SPI3_HOST
+#endif
+
 #if defined (CONFIG_LV_TFT_DISPLAY_SPI_HSPI)
 #define TFT_SPI_HOST HSPI_HOST
 #elif defined (CONFIG_LV_TFT_DISPLAY_SPI_VSPI)
