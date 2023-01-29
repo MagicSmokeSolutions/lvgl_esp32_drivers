@@ -72,7 +72,11 @@ menu "LVGL TFT Display controller"
             bool "Wireless Tag WT32-SC01"
             select LV_TFT_DISPLAY_CONTROLLER_ST7796S
             select LV_TFT_DISPLAY_PROTOCOL_SPI
-    endchoice
+        config LV_PREDEFINED_DISPLAY_LILYGO_T_DONGLE
+            bool "LILYGO T-Dongle"
+            select LV_TFT_DISPLAY_CONTROLLER_ST7735S
+            select LV_TFT_DISPLAY_PROTOCOL_SPI
+        endchoice
 
     # START of helper symbols.
     #
@@ -186,8 +190,8 @@ menu "LVGL TFT Display controller"
     # Used in display init function to send display orientation commands
     choice DISPLAY_ORIENTATION
         prompt "Display orientation"
-        default DISPLAY_ORIENTATION_PORTRAIT if !LV_TFT_DISPLAY_CONTROLLER_SSD1306
-        default DISPLAY_ORIENTATION_LANDSCAPE if LV_TFT_DISPLAY_CONTROLLER_SSD1306
+        default DISPLAY_ORIENTATION_PORTRAIT if !LV_TFT_DISPLAY_CONTROLLER_SSD1306 && !LV_PREDEFINED_DISPLAY_LILYGO_T_DONGLE
+        default DISPLAY_ORIENTATION_LANDSCAPE if LV_TFT_DISPLAY_CONTROLLER_SSD1306 || LV_PREDEFINED_DISPLAY_LILYGO_T_DONGLE
         config DISPLAY_ORIENTATION_PORTRAIT
             bool "Portrait" if !LV_TFT_DISPLAY_CONTROLLER_SSD1306
         config DISPLAY_ORIENTATION_PORTRAIT_INVERTED
@@ -463,7 +467,7 @@ menu "LVGL TFT Display controller"
     endchoice
 
     choice
-        prompt "TFT Data Transfer Mode" if LV_TFT_DISPLAY_PROTOCOL_SPI
+        prompt "TFT Data Transfer Mode" if LV_TFT_DISPLAY_PROTOCOL_SPI && !LV_PREDEFINED_DISPLAY_LILYGO_T_DONGLE
         default LV_TFT_DISPLAY_SPI_TRANS_MODE_SIO
         help
               Select the SPI SIO/DIO/QIO Transfer Mode for the TFT Display.
@@ -593,7 +597,7 @@ menu "LVGL TFT Display controller"
             If it didn't help try LVGL configuration -> Swap the 2 bytes of RGB565 color.
 
     config LV_M5STICKC_HANDLE_AXP192
-        bool "Handle Backlight and TFT power for M5StickC using AXP192." if LV_PREDEFINED_DISPLAY_M5STICKC || LV_TFT_DISPLAY_CONTROLLER_ST7735S
+        bool "Handle Backlight and TFT power for M5StickC using AXP192." if !LV_PREDEFINED_DISPLAY_LILYGO_T_DONGLE && (LV_PREDEFINED_DISPLAY_M5STICKC || LV_TFT_DISPLAY_CONTROLLER_ST7735S)
         default y if LV_PREDEFINED_DISPLAY_M5STICKC
         help
             Display and TFT power supply on M5StickC is controlled using an AXP192 Power Mangerment IC.
@@ -769,6 +773,7 @@ menu "LVGL TFT Display controller"
             default 19 if LV_PREDEFINED_DISPLAY_TTGO
             default 19 if LV_PREDEFINED_DISPLAY_TTGO_CAMERA_PLUS
             default 13 if LV_PREDEFINED_DISPLAY_WT32_SC01
+            default 3 if LV_PREDEFINED_DISPLAY_LILYGO_T_DONGLE
             default 13
 
             help
@@ -838,6 +843,7 @@ menu "LVGL TFT Display controller"
             default 18 if LV_PREDEFINED_DISPLAY_TTGO
             default 21 if LV_PREDEFINED_DISPLAY_TTGO_CAMERA_PLUS
             default 14 if LV_PREDEFINED_DISPLAY_WT32_SC01
+            default 5 if LV_PREDEFINED_DISPLAY_LILYGO_T_DONGLE
             default 14
 
             help
@@ -866,6 +872,7 @@ menu "LVGL TFT Display controller"
             default 5 if LV_PREDEFINED_DISPLAY_TTGO
             default 12 if LV_PREDEFINED_DISPLAY_TTGO_CAMERA_PLUS
             default 15 if LV_PREDEFINED_DISPLAY_WT32_SC01
+            default 4 if LV_PREDEFINED_DISPLAY_LILYGO_T_DONGLE
             default 15
 
             help
@@ -895,6 +902,7 @@ menu "LVGL TFT Display controller"
             default 17 if LV_PREDEFINED_DISPLAY_ATAG
             default 16 if LV_PREDEFINED_DISPLAY_TTGO
             default 15 if LV_PREDEFINED_DISPLAY_TTGO_CAMERA_PLUS
+            default 2 if LV_PREDEFINED_DISPLAY_LILYGO_T_DONGLE
             default 2
 
             help
@@ -916,6 +924,7 @@ menu "LVGL TFT Display controller"
             default 23 if LV_PREDEFINED_DISPLAY_TTGO
             default 33 if LV_PREDEFINED_DISPLAY_TTGO_CAMERA_PLUS
             default 22 if LV_PREDEFINED_DISPLAY_WT32_SC01
+            default 1 if LV_PREDEFINED_DISPLAY_LILYGO_T_DONGLE
             default 4
 
             help
@@ -942,6 +951,7 @@ menu "LVGL TFT Display controller"
             default y if LV_PREDEFINED_DISPLAY_TTGO
             default y if LV_PREDEFINED_DISPLAY_TTGO_CAMERA_PLUS
             default y if LV_PREDEFINED_DISPLAY_WT32_SC01
+            default y if LV_PREDEFINED_DISPLAY_LILYGO_T_DONGLE
             help
                 Enable controlling the display backlight using an GPIO
 
@@ -974,6 +984,7 @@ menu "LVGL TFT Display controller"
             default 4 if LV_PREDEFINED_DISPLAY_TTGO
             default 2 if LV_PREDEFINED_DISPLAY_TTGO_CAMERA_PLUS
             default 23 if LV_PREDEFINED_DISPLAY_WT32_SC01
+            default 38 if LV_PREDEFINED_DISPLAY_LILYGO_T_DONGLE
             default 27
 
             help
